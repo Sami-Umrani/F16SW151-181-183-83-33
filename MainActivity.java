@@ -1,62 +1,36 @@
-package com.umrani.sami.task02application;
+package com.umrani.sami.messageapp;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    EditText textField;
+    static final int REQUEST_CODE = 1;
+    TextView setMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textField = findViewById(R.id.textField);
-    }
-    public void buttonCameraClick(View view)
-    {
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivity(i);
-    }
-    public void buttonGalaryClick(View view)
-    {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse("content://media/external/images/media/"));
-        startActivity(i);
-    }
-    public void buttonCallLogClick(View view)
-    {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse("content://call_log/calls/1"));
-        startActivity(i);
-    }
-    public void buttonBrowserClick(View view)
-    {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse("http://"+textField.getText().toString()+"/"));
-        startActivity(i);
-
-    }
-    public void buttonContactsClick(View view)
-    {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse("content://contacts/people/"));
-        startActivity(i);
-    }
-    public void buttonCallClick(View view)
-    {
-        Intent i = new Intent(Intent.ACTION_CALL);
-        i.setData(Uri.parse("tel:"+textField.getText().toString()));
-        startActivity(i);
-    }
-    public void buttonDialPad(View view)
-    {
-        Intent i = new Intent(Intent.ACTION_DIAL);
-        i.setData(Uri.parse("tel:"+textField.getText().toString()));
-        startActivity(i);
+        setMessage = findViewById(R.id.showMessage);
     }
 
+    public void buttonGetMessage(View view)
+    {     Intent messageIntent = new Intent(MainActivity.this, Main2Activity.class);
+        startActivityForResult(messageIntent, REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode,  Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                String reply = data.getStringExtra("Message");
+                setMessage.setText(reply);
+            }
+        }
+    }
 }
