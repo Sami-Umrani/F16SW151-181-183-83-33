@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tsky"
+    tools:context=".GameOverActivity">
+
+    <TextView
+        android:id="@+id/gameOver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="80dp"
+        android:text="Game Over"
+        android:textAlignment="center"
+        android:textColor="#008000"
+        android:textSize="70dp"
+        android:textStyle="bold"/>
+    <Button
+        android:id="@+id/Play_Again_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gameOver"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary"
+        android:padding="10dp"
+        android:text="Play Again"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+    <ImageView
+        android:id="@+id/Fish4"
+        android:layout_width="204dp"
+        android:layout_height="177dp"
+        android:layout_below="@+id/DisplayScore"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="-235dp"
+        android:src="@drawable/fish4" />
+
+    <TextView
+        android:id="@+id/DisplayScore"
+        android:layout_width="204dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Play_Again_btn"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="73dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Score"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="25sp" />
+
+</RelativeLayout>
