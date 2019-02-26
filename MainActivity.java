@@ -1,88 +1,115 @@
-package com.example.khatr.labtas5_3;
+package com.umrani.sami.lab4listviewapp;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.media.Image;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
-    SensorManager sensorManager;
-    Sensor gyroScope;
-    int index = 0;
-    //TextView textView;
-    ImageView imageView;
-   // int images[] = {R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7};
-    int images[] = {R.drawable.ic_launcher_background, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background};
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Inflater;
+
+public class MainActivity extends AppCompatActivity {
+    ListView listView;
+
+    List<String> list_items;
+    ArrayAdapter<String> arrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //textView = findViewById(R.id.textView);
-        imageView = findViewById(R.id.imageView);
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        gyroScope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        if(gyroScope == null) {
-            finish();
+        listView = findViewById(R.id.listView);
+        list_items = new ArrayList();
+        for(int i =1; i<=50; i++){
+            list_items.add("Computer" + i );
         }
+        arrayAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.support_simple_spinner_dropdown_item, list_items);
+        listView.setAdapter(arrayAdapter);
+        registerForContextMenu(listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = (String) parent.getItemAtPosition(position);
+                Toast.makeText(MainActivity.this, item, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+
     @Override
-    protected void onResume() {
-        sensorManager.registerListener(this, gyroScope, SensorManager.SENSOR_DELAY_NORMAL);
-        super.onResume();
-    }
-    @Override
-    protected  void onPause() {
-        sensorManager.unregisterListener(this);
-        super.onPause();
-    }
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-       /* if(event.values[0] > 0.2) {
-            if(index == 7)
-                index = 0;
-            imageView.setImageResource(images[index]);
-            index++;
-        }
-        else if(event.values[0] < -0.2) {
-            if(index == 7)
-                index = 0;
-            imageView.setImageResource(images[index]);
-            index++;
-        }
-        else if(event.values[1] > 0.2) {
-            if(index == 7)
-                index = 0;
-            imageView.setImageResource(images[index]);
-            index++;
-        }
-        else if(event.values[1] < -0.2) {
-            if(index == 7)
-                index = 0;
-            imageView.setImageResource(images[index]);
-            index++;
-        }*/
-        if(event.values[2] > 0.2) {
-            if(index == 7)
-                index = 0;
-            imageView.setImageResource(images[index]);
-            index++;
-        }
-        else if(event.values[2] < -0.2) {
-            if(index == 7)
-                index = 0;
-            imageView.setImageResource(images[index]);
-            index++;
-        }
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.contextual_menu, menu);
+
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public boolean onContextItemSelected(MenuItem item) {
 
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        final int position = info.position;
+        switch (item.getItemId())
+        {
+            case R.id.contextual_menu_delete:
+
+                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Alert");
+                builder.setMessage("Are you sure to want delete this item?");
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        list_items.remove(position);
+                        listView.setAdapter(arrayAdapter);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.show();
+
+                return false;
+
+
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.option_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.call){
+            Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
+        }
+        if(item.getItemId()==R.id.message){
+            Toast.makeText(this, "Instagram", Toast.LENGTH_SHORT).show();
+        }
+        if(item.getItemId()==R.id.bluetooth){
+            Toast.makeText(this, "Watsapp", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
+
