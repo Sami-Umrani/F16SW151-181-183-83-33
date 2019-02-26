@@ -1,67 +1,88 @@
-package com.example.khatr.labtask5_2;
+package com.example.khatr.labtas5_3;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
+    SensorManager sensorManager;
+    Sensor gyroScope;
+    int index = 0;
+    //TextView textView;
     ImageView imageView;
-    SensorManager mSensorManager;
-    Sensor mProximity;
-    float x;
-    float y;
+   // int images[] = {R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7};
+    int images[] = {R.drawable.ic_launcher_background, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //textView = findViewById(R.id.textView);
         imageView = findViewById(R.id.imageView);
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        if(mProximity == null) {
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        gyroScope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        if(gyroScope == null) {
             finish();
         }
-        x=imageView.getScaleX();
-        y=imageView.getScaleY();
     }
     @Override
-    protected  void onPause() {
-        mSensorManager.unregisterListener(this);
-        super.onPause();
-    }
-    @Override
-    protected  void onResume() {
-        mSensorManager.registerListener(this, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
+    protected void onResume() {
+        sensorManager.registerListener(this, gyroScope, SensorManager.SENSOR_DELAY_NORMAL);
         super.onResume();
     }
     @Override
+    protected  void onPause() {
+        sensorManager.unregisterListener(this);
+        super.onPause();
+    }
+    @Override
     public void onSensorChanged(SensorEvent event) {
-        float scaleX = imageView.getScaleX();
-        float scaleY = imageView.getScaleY();
-
-        if (event.values[0] < mProximity.getMaximumRange()) {
-            //Detected Something nearby
-            imageView.setScaleX(scaleX*2);
-            imageView.setScaleY(scaleY*2);
+       /* if(event.values[0] > 0.2) {
+            if(index == 7)
+                index = 0;
+            imageView.setImageResource(images[index]);
+            index++;
         }
-        else {
-            imageView.setScaleX(x);
-            imageView.setScaleY(y);
+        else if(event.values[0] < -0.2) {
+            if(index == 7)
+                index = 0;
+            imageView.setImageResource(images[index]);
+            index++;
+        }
+        else if(event.values[1] > 0.2) {
+            if(index == 7)
+                index = 0;
+            imageView.setImageResource(images[index]);
+            index++;
+        }
+        else if(event.values[1] < -0.2) {
+            if(index == 7)
+                index = 0;
+            imageView.setImageResource(images[index]);
+            index++;
+        }*/
+        if(event.values[2] > 0.2) {
+            if(index == 7)
+                index = 0;
+            imageView.setImageResource(images[index]);
+            index++;
+        }
+        else if(event.values[2] < -0.2) {
+            if(index == 7)
+                index = 0;
+            imageView.setImageResource(images[index]);
+            index++;
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }
